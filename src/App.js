@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import './App.css';
 // import heroes from './heroes';
 // import {Tachyons} from 'tachyons';
+import CardList from './components/CardList';
+import SearchField from './components/SearchField';
 
 
 export class App extends Component {
@@ -25,21 +27,17 @@ export class App extends Component {
   //   console.log("getDerivedStateFromProps call...........")
   // }
 
-  componentDidMount(){
+  async componentDidMount(){
     // all backend endpoint call here
     // console.log("ComponentDidMount  ...........");
    
     console.log(this.state.data);
-    this.fetchData()
-  }
-
-  fetchData = () =>{
-   
-    fetch('https://jsonplaceholder.typicode.com/users')
+    
+    await fetch('https://jsonplaceholder.typicode.com/users')
     .then(res => res.json())
-    .then(data => {
+    .then(heroes => {
       this.setState({
-        data : data
+        data : heroes
       })
 
     }).catch((e) =>{
@@ -48,13 +46,29 @@ export class App extends Component {
          erro: e
        })
     });
-    
-    // this.setState({
-    //   data : data
-    // })
+    console.log(this.state.data);
+    // await this.fetchData()
+  }
+
+  //  fetchData = async () =>{
+   
+  //   await fetch('https://jsonplaceholder.typicode.com/users')
+  //   .then(res => res.json())
+  //   .then(data => {
+  //     this.setState({
+  //       data : data
+  //     })
+
+  //   }).catch((e) =>{
+  //      console.log(e);
+  //      this.setState({
+  //        erro: e
+  //      })
+  //   });
+  
     
 
-  }
+  // }
 
   render() {
     
@@ -62,26 +76,11 @@ export class App extends Component {
     return (
       <>
         <div className="app">
-          <h1>Learning Life Cycle of React</h1>
-        </div>
-        <div className="hero__cards">
-     {
-          this.state.data ? 
-          (this.state.data.map( (hero) => {
-            return(
-              <div className="card__item fl w-25">
-              <p>ID : {hero.id}</p>
-              <h3>Name : {hero.name}</h3>
-              </div>
-
-            )
-          })) : 
-        (
-          <div> {this.state.error}</div>
-        )
-        }
-      
-        </div>
+          <h1>Our Heroes</h1>
+        
+        <SearchField/>
+       <CardList heroes={this.state.data}/>
+       </div>
       </>
     )
   }
